@@ -1,0 +1,41 @@
+From c76c4d5aa5ee8b344fefa1076de880ea96247e0e Mon Sep 17 00:00:00 2001
+From: Rob Browning <rlb@defaultvalue.org>
+Date: Mon, 10 Oct 2016 17:35:56 -0500
+Subject: Kill gpg agent in package-test.el to avoid a race
+
+package-test.el should no longer fail during clean up.
+
+* Previously a delete-directories call raced with the gpg agent's own
+  cleanup process (presumably triggered by the first deletion of one of
+  the agent's sockets).  As a result, it looks like the agent might
+  delete one of its sockets after delete-directories had decided to
+  delete the socket, but before it made the attempt, causing an
+  exception.
+
+* To fix the problem, explicitly ask gpg-connect-agent to kill the agent
+  before attempting to delete the gnupg home directory, and then delete
+  via "rm -rf" to ignore any vanishing files.
+---
+ test/lisp/emacs-lisp/package-tests.el | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/test/lisp/emacs-lisp/package-tests.el b/test/lisp/emacs-lisp/package-tests.el
+index 4fcaf0e84c2..4cf49752605 100644
+--- a/test/lisp/emacs-lisp/package-tests.el
++++ b/test/lisp/emacs-lisp/package-tests.el
+@@ -155,7 +155,14 @@
+                ,@body)))
+ 
+        (when (file-directory-p package-test-user-dir)
+-         (delete-directory package-test-user-dir t))
++         (call-process "gpg-connect-agent" nil nil nil
++                       "--homedir" (concat package-test-user-dir "/gnupg")
++                       "--no-autostart"
++                       "killagent" "/bye")
++         ;; Call "rm -rf" instead of delete-directory so that it won't
++         ;; choke if the gpg-agent sockets disappear during the
++         ;; recursive traversal.
++         (call-process "rm" nil nil nil "-r" package-test-user-dir))
+ 
+        (when (and (boundp 'package-test-archive-upload-base)
+                   (file-directory-p package-test-archive-upload-base))

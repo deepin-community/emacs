@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+ALTERNATIVES="@ALTERNATIVES@"
+
+# update-alternatives on things that collide with xemacs, other editors
+if [ "$1" != upgrade ]
+then
+  for i in ${ALTERNATIVES}
+  do
+    update-alternatives --remove "$i" /usr/bin/$i.emacs
+  done
+fi
+
+#DEBHELPER#
