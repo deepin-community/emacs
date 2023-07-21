@@ -1,4 +1,4 @@
-From 288adb6d0d598bbc4bbdfeae3d7bafe794261be3 Mon Sep 17 00:00:00 2001
+From ba5c7abc36cf97f3a739b64c6d8d8147b4d98c08 Mon Sep 17 00:00:00 2001
 From: Rob Browning <rlb@defaultvalue.org>
 Date: Sun, 7 Apr 2013 15:03:05 -0500
 Subject: Prefer /usr/share/info/emacs/
@@ -12,10 +12,10 @@ lisp/info.el to include /usr/share/info/emacs before /usr/share/info.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/lisp/info.el b/lisp/info.el
-index 033a7a5cbb5..3bed743b9a6 100644
+index 5655e3f3ce9..fb2b7c78fc9 100644
 --- a/lisp/info.el
 +++ b/lisp/info.el
-@@ -222,7 +222,8 @@ A header-line does not scroll with the rest of the buffer."
+@@ -203,7 +203,8 @@ Info-default-directory-list
  	      (nconc standard-info-dirs (list config-dir))
  	    (cons config-dir standard-info-dirs))))
      (if (not (eq system-type 'windows-nt))
