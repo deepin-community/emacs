@@ -1,7 +1,212 @@
+emacs (1:29.1+1-5) unstable; urgency=medium
+
+  * Don't try to build with native compilation on riscv64 (Closes: #1050653).
+    Thanks to Aurelien Jarno and Bo YU.
+
+  * Change native-comp-async-jobs-number default to 1 (Closes: #1050577).
+
+  * d/rules: Re-encode in UTF-8.
+
+  * d/copyright: Standardise continuation lines.
+
+  * d/compat: Replace with debhelper-compat build-dep.
+  * d/control: Update build-dep libncurses5-dev -> libncurses-dev.
+  * d/control emacs-common: Comment out redundant Recommends of emacs-el.
+  * d/control emacs-common: Drop some very old Breaks emacsNN entries.
+
+  * Fix binary-without-manpage Lintian overrides.
+  * Add two Lintian overrides.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 30 Aug 2023 08:53:05 +0100
+
+emacs (1:29.1+1-4) unstable; urgency=medium
+
+  * Take emacs-el from the pgtk build too to fix arch:all-only build.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 23 Aug 2023 14:33:41 +0100
+
+emacs (1:29.1+1-3) unstable; urgency=medium
+
+  * Take emacs-bin-common binaries from the pgtk build (Closes: #1043060).
+    Use the pgtk build to populate emacs-common too, for simplicity.
+    Thanks to Arto Jantunen for investigation and discussion.
+
+  * d/rules: Set TERM to avoid a build failure (Closes: #1043006).
+    Thanks to Gianfranco Costamagna for the report and fix.
+
+  * d/rules: Fix dh_listpackages test for emacs-pgtk.
+
+  * override_dh_auto_install: Delete $(install_dir_pgtk) too.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 23 Aug 2023 10:15:43 +0100
+
+emacs (1:29.1+1-2) unstable; urgency=medium
+
+  * Source-only upload.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Tue, 01 Aug 2023 19:24:27 +0100
+
+emacs (1:29.1+1-1) unstable; urgency=medium
+
+  * Merge upstream version 29.1.
+    - d/rules: Update for new name of emacs.pdmp.
+    - debian/upstream-version: Update regexp to find Emacs 29.1's AC_INIT.
+
+  * Add new emacs-pgtk binary package for the PGTK port.
+
+  * d/control: Add build-deps on libsqlite3, libtree-sitter and libwebp.
+
+  * Patch project-vc-recognizes-git test for Debian build.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 31 Jul 2023 09:28:10 +0100
+
+emacs (1:28.2+1-16) unstable; urgency=medium
+
+  * Switch to gcc-13 & restore versioned gcc build-dep (Closes: #1042185).
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Sat, 29 Jul 2023 10:31:54 +0100
+
+emacs (1:28.2+1-15) unstable; urgency=medium
+
+  * emacs-common: add breaks/replaces emacs-bin-common (<< 1:28) since the
+    emacs.service file moved from emacs-bin-common to emacs-common.
+    Thanks to Helmut Grohne for reporting the problem and Andreas Beckmann
+    for providing and testing the fix. (Closes: 1034941)
+
+  * emacs-common: add breaks elpa-cider (<< 0.19.0+dfsg-4~).  Thanks to
+    Andreas Beckmann for reporting the problem and providing and testing
+    the fix. (Closes: 1035781)
+
+ -- Rob Browning <rlb@defaultvalue.org>  Sat, 13 May 2023 15:17:27 -0500
+
+emacs (1:28.2+1-14) unstable; urgency=medium
+
+  * Fix gnus nnml crash on some invalid headers.  Add
+    0026-Gnus-nnml-should-avoid-crashing-on-some-invalid-head.patch to
+    address the issue. (Closes: 1033397)
+
+  * Fix Org Mode command injection vulnerability CVE-2023-28617.  Add
+    0027-Org-Mode-vulnerability-CVE-2023-28617-is-fixed-1-2.patch and
+    0028-Org-Mode-vulnerability-CVE-2023-28617-is-fixed-2-2.patch to
+    address the issue. (Closes: 1033342)
+
+ -- Rob Browning <rlb@defaultvalue.org>  Sat, 01 Apr 2023 22:38:56 -0500
+
+emacs (1:28.2+1-13) unstable; urgency=high
+
+  * Cherry-pick upstream fixes for command injection vulnerabilities
+    (CVE-2023-27985, CVE-2023-27986) (Closes: #1032538).
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Tue, 14 Mar 2023 13:30:28 -0700
+
+emacs (1:28.2+1-12) unstable; urgency=medium
+
+  * Fix memory leak in etags.c introduced by recent security fix.
+    Thanks to Adrian Bunk for identifying the issue.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Thu, 02 Mar 2023 12:21:19 -0700
+
+emacs (1:28.2+1-11) unstable; urgency=high
+
+  * Cherry-pick upstream fixes for command injection vulnerabilities
+    (CVE-2022-48337, CVE-2022-48338, CVE-2022-48339) (Closes: #1031730).
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 22 Feb 2023 11:01:50 -0700
+
+emacs (1:28.2+1-10) unstable; urgency=medium
+
+  * Fix copyright tests for 2023 onwards.  Thanks to Mattias Engdegård for
+    the fix, and Vincent Lefevre for reporting the bug and posting the
+    patch to the Debian BTS (Closes: #1028607).
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Tue, 17 Jan 2023 17:32:40 -0700
+
+emacs (1:28.2+1-9) unstable; urgency=medium
+
+  * Backport inhibit-automatic-native-compilation from Emacs 29.
+    We intend to use the EMACS_INHIBIT_AUTOMATIC_NATIVE_COMPILATION
+    environment variable to address bugs like #1021842.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Sun, 18 Dec 2022 15:36:53 -0700
+
+emacs (1:28.2+1-8) unstable; urgency=high
+
+  * Fix ctags local command execution vulnerability (CVE-2022-45939)
+    (Closes: #1025009).
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Thu, 01 Dec 2022 18:44:21 -0700
+
+emacs (1:28.2+1-7) unstable; urgency=medium
+
+  * Drop unused gcc-12 and libmagick++-6.q16-dev build-deps.
+
+  * Add liblcms2-dev build-dep.
+
+  * d/copyright: Fix format of Upstream-Contact field.
+
+  * d/copyright: Fix the names of upstream's release tag and our tarball.
+    Introduce a new substitution variable, DEBORIG_VERSION.
+
+  * Run 'wrap-and-sort -st'
+    Additionally apply the changes to d/copyright.in.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Sun, 27 Nov 2022 17:37:32 -0700
+
+emacs (1:28.2+1-6) unstable; urgency=medium
+
+  * Mark two flaky tests as unstable.
+    test-undo-region is failing on Debian arch:all autobuilders, and
+    process-tests/multiple-threads-waiting randomly fails locally and on
+    autobuilders. (Closes: #1024060)
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Thu, 17 Nov 2022 13:13:12 -0700
+
+emacs (1:28.2+1-5) unstable; urgency=medium
+
+  * Fix large core dumps from background processes.
+    Add 0013-Fix-large-core-dumps-from-background-processes.patch to fix
+    the problem. (Closes: #1017711)
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Sun, 13 Nov 2022 13:44:02 -0700
+
+emacs (1:28.2+1-4) unstable; urgency=medium
+
+  * Fix eln files not being generated by native-comp-async.
+    Add 0012-Fix-eln-files-not-being-generated-when-native-comp-a.patch to
+    fix the problem.  Thanks to Youhei SASAKI and Tatsuya Kinoshita for
+    reporting the problem and indicating the upstream fix to backport
+    (Closes: #1023440).
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Tue, 08 Nov 2022 12:32:50 -0700
+
+emacs (1:28.2+1-3) unstable; urgency=medium
+
+  * Avoid fork bomb caused by native compilation trampolines.
+    Add 0011-Avoid-fork-bomb-caused-by-native-compilation-trampol.patch to
+    fix the problem.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Thu, 27 Oct 2022 15:41:35 -0700
+
+emacs (1:28.2+1-2) unstable; urgency=medium
+
+  * Avoid fork bomb caused by native compilation.  Add
+    0010-Avoid-fork-bomb-caused-by-native-compilation.patch to fix the
+    problem.  Thanks to Aymeric Agon-Rambosson for help backporting the
+    patch.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Tue, 25 Oct 2022 18:41:26 -0700
+
 emacs (1:28.2+1-1) unstable; urgency=medium
 
   * Merge upstream version 28.2.
 
+  * Add myself, Sean Whitton, to Uploaders field.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Thu, 13 Oct 2022 16:32:09 -0700
+
+emacs (1:28.1+1-4) unstable; urgency=medium
+
+  [ Rob Browning ]
   * debian/rules: don't set debian CFLAGS to -O0 on arm64 anymore.  It
     looks like this may be fixed now.  Let's see.
 
@@ -28,6 +233,59 @@ emacs (1:28.2+1-1) unstable; urgency=medium
   * Don't enable Debian systemd unit by default.
 
  -- Rob Browning <rlb@defaultvalue.org>  Mon, 26 Sep 2022 20:27:06 -0500
+
+emacs (1:28.1+1-3) unstable; urgency=medium
+
+  * Have emacs-common depend on emacs-el until the crash is resolved.
+    This should mitigate a whole raft of bugs, some of which have been
+    merged into #1017698.
+
+  * debian/copyright: fix DEP-5 format errors.  Have one upstream-contact
+    with multiple values (DEP-5), and separate paragraphs in comments with
+    " ." lines.
+
+ -- Rob Browning <rlb@defaultvalue.org>  Wed, 07 Sep 2022 16:08:01 -0500
+
+emacs (1:28.1+1-2) unstable; urgency=medium
+
+  * Switch from gcc 11 to 12.
+
+ -- Rob Browning <rlb@defaultvalue.org>  Sat, 20 Aug 2022 17:02:41 -0500
+
+emacs (1:28.1+1-1) unstable; urgency=medium
+
+  * Merge upstream version 28.1. (Closes: #1009169)
+
+  * Update debian/copyright for 28.1.
+
+  * Drop 0008-Don-t-downcase-real-xref-in-elisp-mode-tests.patch.  This
+    appears to have been addressed upstream, and now the patch just breaks
+    the tests.
+
+  * debian/rules: configure --with-libsystemd not --enable-libsystemd.
+    The latter doesn't appear to be a supported option.
+
+  * debian/control: recommend fonts-noto-color-emoji.  See "** Improved
+    support for Emoji" in the 28.1 NEWS.
+
+  * debian/rules: update copyrights; rely on dpkg pkg-info.mk for src_name
+    and debian_ver; rely on dpkg architecture.mk for DEB_HOST_*
+    DEB_BUILD_*.; move libexecdir /usr/lib to /usr/libexec.
+
+  * debian/emacs.desktop: add upstream "StartupNotify=true".
+
+  * debian/compat: upgrade from 10 to 13.
+
+  * Enable native compilation for debian.  Thanks to Aymeric
+    Agon-Rambosson for noting that the native-lisp tree is flavor
+    specific.
+
+  * debian/control: add ca-certificates build dependency for tests.  The
+    process-async-https-with-delay test depends on it.
+
+  * debian/changelog: add 1:27.1+1-3.1 NMU.
+
+ -- Rob Browning <rlb@defaultvalue.org>  Fri, 15 Jul 2022 17:26:23 -0500
 
 emacs (1:27.1+1-3.1) unstable; urgency=medium
 

@@ -3,6 +3,7 @@
 /*-stamp
 /.debhelper/
 /build-gtk/
+/build-pgtk/
 /build-lucid/
 /build-nox/
 /build-src/
@@ -49,6 +50,19 @@
 /emacs-gtk.postrm.debhelper
 /emacs-gtk.prerm
 /emacs-gtk.substvars
+/emacs-pgtk
+/emacs-pgtk.README.Debian
+/emacs-pgtk.debhelper.log
+/emacs-pgtk.desktop
+/emacs-pgtk.links
+/emacs-pgtk.lintian-overrides
+/emacs-pgtk.menu
+/emacs-pgtk.postinst
+/emacs-pgtk.postinst.debhelper
+/emacs-pgtk.postrm
+/emacs-pgtk.postrm.debhelper
+/emacs-pgtk.prerm
+/emacs-pgtk.substvars
 /emacs-lucid
 /emacs-lucid.README.Debian
 /emacs-lucid.debhelper.log
