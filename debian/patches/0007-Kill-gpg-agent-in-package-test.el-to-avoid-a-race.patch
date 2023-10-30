@@ -1,4 +1,4 @@
-From d64c38e7ebbae9d423ba2cd992b5eeb11a31deef Mon Sep 17 00:00:00 2001
+From dd14c8a6a1844d7d55ec204190387aa8856de5ff Mon Sep 17 00:00:00 2001
 From: Rob Browning <rlb@defaultvalue.org>
 Date: Mon, 10 Oct 2016 17:35:56 -0500
 Subject: Kill gpg agent in package-test.el to avoid a race
@@ -16,18 +16,17 @@ package-test.el should no longer fail during clean up.
   before attempting to delete the gnupg home directory, and then delete
   via "rm -rf" to ignore any vanishing files.
 ---
- test/lisp/emacs-lisp/package-tests.el | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ test/lisp/emacs-lisp/package-tests.el | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/test/lisp/emacs-lisp/package-tests.el b/test/lisp/emacs-lisp/package-tests.el
-index 69c14050b96..2cf57147200 100644
+index 0016fb586b7..a6052a5db23 100644
 --- a/test/lisp/emacs-lisp/package-tests.el
 +++ b/test/lisp/emacs-lisp/package-tests.el
-@@ -161,7 +161,14 @@ with-package-test
-               (expand-file-name f package-test-archive-upload-base))))
-          (delete-directory package-test-archive-upload-base))
-        (when (file-directory-p package-test-user-dir)
--         (delete-directory package-test-user-dir t))
+@@ -160,6 +160,14 @@ with-package-test
+                (delete-file
+                 (expand-file-name f package-test-archive-upload-base))))
+            (delete-directory package-test-archive-upload-base))
 +         (call-process "gpg-connect-agent" nil nil nil
 +                       "--homedir" (concat package-test-user-dir "/gnupg")
 +                       "--no-autostart"
@@ -35,7 +34,7 @@ index 69c14050b96..2cf57147200 100644
 +         ;; Call "rm -rf" instead of delete-directory so that it won't
 +         ;; choke if the gpg-agent sockets disappear during the
 +         ;; recursive traversal.
-+         (call-process "rm" nil nil nil "-r" package-test-user-dir))
++         (call-process "rm" nil nil nil "-r" package-test-user-dir)
  
-        (when (and (boundp 'package-test-archive-upload-base)
-                   (file-directory-p package-test-archive-upload-base))
+          (when (and (boundp 'package-test-archive-upload-base)
+                     (file-directory-p package-test-archive-upload-base))
