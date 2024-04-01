@@ -1,6 +1,6 @@
 ;;; comp.el --- compilation of Lisp code into native code -*- lexical-binding: t -*-
 
-;; Copyright (C) 2019-2023 Free Software Foundation, Inc.
+;; Copyright (C) 2019-2024 Free Software Foundation, Inc.
 
 ;; Author: Andrea Corallo <acorallo@gnu.org>
 ;; Keywords: lisp
@@ -1392,11 +1392,8 @@ clashes."
   (unless byte-to-native-top-level-forms
     (signal 'native-compiler-error-empty-byte filename))
   (unless (comp-ctxt-output comp-ctxt)
-    (setf (comp-ctxt-output comp-ctxt) (comp-el-to-eln-filename
-                                        filename
-                                        (or native-compile-target-directory
-                                            (when byte+native-compile
-                                              (car (last native-comp-eln-load-path)))))))
+    (setf (comp-ctxt-output comp-ctxt)
+          (comp-el-to-eln-filename filename native-compile-target-directory)))
   (setf (comp-ctxt-speed comp-ctxt) (alist-get 'native-comp-speed
                                                byte-native-qualities)
         (comp-ctxt-debug comp-ctxt) (alist-get 'native-comp-debug
@@ -4099,7 +4096,8 @@ the deferred compilation mechanism."
              (symbols-with-pos-enabled t)
              ;; Have byte compiler signal an error when compilation fails.
              (byte-compile-debug t)
-             (comp-ctxt (make-comp-ctxt :output output
+             (comp-ctxt (make-comp-ctxt :output (when output
+                                                  (expand-file-name output))
                                         :with-late-load with-late-load)))
         (comp-log "\n\n" 1)
         (unwind-protect
@@ -4231,8 +4229,9 @@ bytecode definition was not changed in the meantime)."
           ;; compilation, so update `comp-files-queue' to reflect that.
           (unless (or (null load)
                       (eq load (cdr entry)))
-            (cl-substitute (cons file load) (car entry) comp-files-queue
-                           :key #'car :test #'string=))
+            (setf comp-files-queue
+                  (cl-substitute (cons file load) (car entry) comp-files-queue
+                                 :key #'car :test #'string=)))
 
         (unless (native-compile-async-skip-p file load selector)
           (let* ((out-filename (comp-el-to-eln-filename file))
@@ -4308,8 +4307,9 @@ last directory in `native-comp-eln-load-path')."
   (comp-ensure-native-compiler)
   (let ((comp-running-batch-compilation t)
         (native-compile-target-directory
-            (if for-tarball
-                (car (last native-comp-eln-load-path)))))
+         (if for-tarball
+             (car (last native-comp-eln-load-path))
+           native-compile-target-directory)))
     (cl-loop for file in command-line-args-left
              if (or (null byte+native-compile)
                     (cl-notany (lambda (re) (string-match re file))
@@ -4323,7 +4323,7 @@ last directory in `native-comp-eln-load-path')."
 Make sure that eln file is younger than byte-compiled one and
 return the filename of this last.
 
-This function can be used only in conjuntion with
+This function can be used only in conjunction with
 `byte+native-compile' `byte-to-native-output-buffer-file' (see
 `batch-byte+native-compile')."
   (pcase byte-to-native-output-buffer-file
@@ -4351,6 +4351,8 @@ variable \"NATIVE_DISABLED\" is set, only byte compile."
       (batch-byte-compile)
     (cl-assert (length= command-line-args-left 1))
     (let* ((byte+native-compile t)
+           (native-compile-target-directory
+            (car (last native-comp-eln-load-path)))
            (byte-to-native-output-buffer-file nil)
            (eln-file (car (batch-native-compile))))
       (comp-write-bytecode-file eln-file)

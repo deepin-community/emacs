@@ -1,6 +1,6 @@
 ;;; csharp-mode.el --- Support for editing C#  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2022-2023 Free Software Foundation, Inc.
+;; Copyright (C) 2022-2024 Free Software Foundation, Inc.
 
 ;; Author     : Theodor Thornhill <theo@thornhill.no>
 ;;              Jostein Kjønigsen <jostein@kjonigsen.net>
@@ -45,6 +45,7 @@
 (declare-function treesit-node-start "treesit.c")
 (declare-function treesit-node-type "treesit.c")
 (declare-function treesit-node-child-by-field-name "treesit.c")
+(declare-function treesit-query-capture "treesit.c")
 
 (defgroup csharp nil
   "Major mode for editing C# code."
@@ -492,11 +493,14 @@ compilation and evaluation time conflicts."
        ;; Next non-whitespace character should be '{'
        (goto-char (c-point 'boi))
        (unless (eq (char-after) ?{)
-         (backward-up-list 1 t t))
+         (ignore-errors (backward-up-list 1 t t)))
        (save-excursion
-         ;; 'new' should be part of the line
+         ;; 'new' should be part of the line, but should not trigger if
+         ;; statement has already ended, like for 'var x = new X();'.
+         ;; Also, deal with the possible end of line obscured by a
+         ;; trailing comment.
          (goto-char (c-point 'iopl))
-         (looking-at ".*new.*")))
+         (looking-at "^[^//]*new[^//]*;$")))
      ;; Line should not already be terminated
      (save-excursion
        (goto-char (c-point 'eopl))
@@ -816,7 +820,7 @@ compilation and evaluation time conflicts."
    :language 'c-sharp
    :feature 'definition
    :override t
-   '((qualified_name (identifier) @font-lock-type-face)
+   `((qualified_name (identifier) @font-lock-type-face)
      (using_directive (identifier) @font-lock-type-face)
      (using_directive (name_equals
                        (identifier) @font-lock-type-face))
@@ -843,8 +847,13 @@ compilation and evaluation time conflicts."
      (class_declaration (identifier) @font-lock-type-face)
 
      (constructor_declaration name: (_) @font-lock-type-face)
-
-     (method_declaration type: [(identifier) (void_keyword)] @font-lock-type-face)
+     ;;; Handle different releases of tree-sitter-c-sharp.
+     ;;; Check if keyword void_keyword is available, then return the correct rule."
+     ,@(condition-case nil
+           (progn (treesit-query-capture 'csharp '((void_keyword) @capture))
+                  `((method_declaration type: [(identifier) (void_keyword)] @font-lock-type-face)))
+         (error
+          `((method_declaration type: [(identifier) (predefined_type)] @font-lock-type-face))))
      (method_declaration type: (generic_name (identifier) @font-lock-type-face))
      (method_declaration name: (_) @font-lock-function-name-face)
 

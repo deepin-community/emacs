@@ -1,6 +1,6 @@
 /* Lisp object printing and output streams.
 
-Copyright (C) 1985-2023 Free Software Foundation, Inc.
+Copyright (C) 1985-2024 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -759,8 +759,7 @@ For instance:
 
   (prin1 object nil \\='((length . 100) (circle . t))).
 
-See the manual entry `(elisp)Output Overrides' for a list of possible
-values.
+See Info node `(elisp)Output Overrides' for a list of possible values.
 
 As a special case, OVERRIDES can also simply be the symbol t, which
 means "use default values for all the print-related settings".  */)

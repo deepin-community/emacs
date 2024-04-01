@@ -76,7 +76,8 @@ Provides: editor, emacs, emacsen, info-browser, mail-reader, news-reader
 Recommends: fonts-noto-color-emoji
 Suggests: emacs-common-non-dfsg
 Conflicts: emacs-gtk, emacs-pgtk, emacs-nox
-Replaces: emacs-gtk, emacs-pgtk, emacs-nox
+Replaces: emacs-gtk, emacs-pgtk, emacs-nox, emacs-bin-common (<< 1:29.2)
+Breaks: emacs-bin-common (<< 1:29.2)
 Description: GNU Emacs editor (with Lucid GUI support)
  GNU Emacs is the extensible self-documenting text editor.  This
  package contains a version of Emacs with support for a graphical user
@@ -98,7 +99,8 @@ Depends:
 Provides: editor, emacs, emacsen, info-browser, mail-reader, news-reader
 Suggests: emacs-common-non-dfsg
 Conflicts: emacs-gtk, emacs-pgtk, emacs-lucid
-Replaces: emacs-gtk, emacs-pgtk, emacs-lucid
+Replaces: emacs-gtk, emacs-pgtk, emacs-lucid, emacs-bin-common (<< 1:29.2)
+Breaks: emacs-bin-common (<< 1:29.2)
 Description: GNU Emacs editor (without GUI support)
  GNU Emacs is the extensible self-documenting text editor.  This
  package contains a version of Emacs compiled without support for X,
@@ -115,7 +117,8 @@ Provides: editor, emacs, emacsen, info-browser, mail-reader, news-reader
 Recommends: fonts-noto-color-emoji
 Suggests: emacs-common-non-dfsg
 Conflicts: emacs-pgtk, emacs-lucid, emacs-nox
-Replaces: emacs-pgtk, emacs-lucid, emacs-nox
+Replaces: emacs-pgtk, emacs-lucid, emacs-nox, emacs-bin-common (<< 1:29.2)
+Breaks: emacs-bin-common (<< 1:29.2)
 Description: GNU Emacs editor (with GTK+ GUI support)
  GNU Emacs is the extensible self-documenting text editor.  This
  package contains a version of Emacs with a graphical user interface
@@ -135,7 +138,8 @@ Provides: editor, emacs, emacsen, info-browser, mail-reader, news-reader
 Recommends: fonts-noto-color-emoji
 Suggests: emacs-common-non-dfsg
 Conflicts: emacs-gtk, emacs-lucid, emacs-nox
-Replaces: emacs-gtk, emacs-lucid, emacs-nox
+Replaces: emacs-gtk, emacs-lucid, emacs-nox, emacs-bin-common (<< 1:29.2)
+Breaks: emacs-bin-common (<< 1:29.2)
 Description: GNU Emacs editor (with GTK+ Wayland GUI support)
  GNU Emacs is the extensible self-documenting text editor.  This
  package contains a version of Emacs with a graphical user interface
@@ -148,6 +152,11 @@ Description: GNU Emacs editor (with GTK+ Wayland GUI support)
 Package: emacs-bin-common
 Architecture: any
 Depends: emacs-common (= ${source:Version}), ${misc:Depends}, ${shlibs:Depends}
+Breaks:
+ emacs-gtk (<< 1:29.2),
+ emacs-pgtk (<< 1:29.2),
+ emacs-lucid (<< 1:29.2),
+ emacs-nox (<< 1:29.2),
 Recommends: mailutils
 Description: GNU Emacs editor's shared, architecture dependent files
  GNU Emacs is the extensible self-documenting text editor.

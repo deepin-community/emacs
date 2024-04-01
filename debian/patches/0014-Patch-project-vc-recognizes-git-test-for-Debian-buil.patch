@@ -1,4 +1,4 @@
-From 203201f1f29e74ba00a27f1b16cfb2d12d32468c Mon Sep 17 00:00:00 2001
+From df4419a4ff06c860565fc6a79ab3b5c4996a94f8 Mon Sep 17 00:00:00 2001
 From: Sean Whitton <spwhitton@spwhitton.name>
 Date: Mon, 31 Jul 2023 09:26:48 +0100
 Subject: Patch project-vc-recognizes-git test for Debian build
@@ -8,7 +8,7 @@ Subject: Patch project-vc-recognizes-git test for Debian build
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/test/lisp/progmodes/project-tests.el b/test/lisp/progmodes/project-tests.el
-index 5a206b67db1..7593fb232e1 100644
+index 1111344387b..652567a7b59 100644
 --- a/test/lisp/progmodes/project-tests.el
 +++ b/test/lisp/progmodes/project-tests.el
 @@ -124,7 +124,7 @@ project-vc-recognizes-git

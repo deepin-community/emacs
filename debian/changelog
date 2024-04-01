@@ -1,3 +1,62 @@
+emacs (1:29.3+1-1) unstable; urgency=high
+
+  * Merge upstream version 29.3.  Thanks to David Bremner for the
+    report. (Closes: 1067630)
+
+  * Update debian/copyright for 29.3
+
+ -- Rob Browning <rlb@defaultvalue.org>  Sun, 24 Mar 2024 16:30:50 -0500
+
+emacs (1:29.2+1-2) unstable; urgency=medium
+
+  * Fix Breaks/Replaces by prepending missing epoch (Closes: #1064851)
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Tue, 27 Feb 2024 09:26:29 +0800
+
+emacs (1:29.2+1-1) unstable; urgency=medium
+
+  [ Rob Browning ]
+  * Give each Emacs flavor its own emacsclient.
+    Move emacsclient from emacs-bin-common to the emacsVER (i.e.
+    emacs-lucid, emacs-gtk, ...) packages so that each one will have the
+    binary that was built for that flavor.
+
+    Explicitly list the variant and common bin alternatives instead of
+    globbing.  Add the alternatives variables to deb_sub so we don't need
+    the separate perl -i substitutions.
+
+    Stop splitting some of the debian/rules $(call ...) invocations across
+    two lines because it was introducing a space into the argument value
+    which would then break quoted expansions like "$(1)...".
+
+    Thanks to Wang Yizhen & others for discussion.
+    Closes: #1050953.  See also: #1043060.
+
+  * Generate README.Debian from patch README-Debian psuedo-headers.
+
+    Rework debian/patch-to-news to generate the README.Debian entry from a
+    README-Debian DEP-3-style psuedo-header, when present.  The header's
+    syntax is similar to the debian/control Description format.  Among
+    other things, this change makes the common case of cherry-picking
+    upstream patches easier, and less invasive, since in many cases, a
+    simple README-Debian header can be appended while adding the other
+    headers, instead of (as previously) reindenting the upstream commit, etc.
+
+  * Adjust debian/patches for the new patch-to-news.
+
+  * debian/emacs-common.README.in: drop vestigial ".elc removal" notice.
+    Long irrelevant since switching to base the packaging on the upstream
+    source repository.
+
+  * debian/emacs-common.README.in: match NEWS mode/format vars.
+
+  [ Sean Whitton ]
+  * Merge upstream version 29.2.
+
+  * debian/control: Add Breaks/Replaces for emacsclient package move.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 26 Feb 2024 16:55:58 +0800
+
 emacs (1:29.1+1-5) unstable; urgency=medium
 
   * Don't try to build with native compilation on riscv64 (Closes: #1050653).
