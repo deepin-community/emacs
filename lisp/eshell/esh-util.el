@@ -1,6 +1,6 @@
 ;;; esh-util.el --- general utilities  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1999-2023 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2024 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 
@@ -283,7 +283,7 @@ as the $PATH was actually specified."
                  (eshell-under-windows-p))
         (push "." path))
       (if (and remote (not literal-p))
-          (mapcar (lambda (x) (file-name-concat remote x)) path)
+          (mapcar (lambda (x) (concat remote x)) path)
         path))))
 
 (defun eshell-set-path (path)

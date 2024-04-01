@@ -28,6 +28,14 @@ update-alternatives \
   --slave /usr/share/man/man1/editor.1.gz editor.1.gz \
           /usr/share/man/man1/emacs.emacs.1.gz
 
+for alt in @DEB_VAR_ALTERNATIVES@
+do
+    update-alternatives \
+        --install "/usr/bin/$alt" "$alt" "/usr/bin/$alt.emacs" @BIN_PRIORITY@ \
+        --slave "/usr/share/man/man1/$alt.1.gz" "$alt.1.gz" \
+        "/usr/share/man/man1/$alt.emacs.1.gz"
+done
+
 # emacsen-common registration.
 /usr/lib/emacsen-common/emacs-install emacs
 

@@ -1,4 +1,3 @@
 binary-without-manpage [usr/bin/ctags.emacs]
 binary-without-manpage [usr/bin/ebrowse.emacs]
-binary-without-manpage [usr/bin/emacsclient.emacs]
 binary-without-manpage [usr/bin/etags.emacs]

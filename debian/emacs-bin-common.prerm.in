@@ -2,15 +2,12 @@
 
 set -e
 
-ALTERNATIVES="@ALTERNATIVES@"
-
-# update-alternatives on things that collide with xemacs, other editors
 if [ "$1" != upgrade ]
 then
-  for i in ${ALTERNATIVES}
-  do
-    update-alternatives --remove "$i" /usr/bin/$i.emacs
-  done
+    for alt in @DEB_COMMON_ALTERNATIVES@
+    do
+        update-alternatives --remove "$alt" "/usr/bin/$alt.emacs"
+    done
 fi
 
 #DEBHELPER#

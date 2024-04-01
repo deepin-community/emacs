@@ -1,4 +1,4 @@
-From 48687a2f3c9a6c2babcd0f9b52adfc1f83a79a5c Mon Sep 17 00:00:00 2001
+From 41bba59001c8d79bf1433e0e5ef7099a99802e8f Mon Sep 17 00:00:00 2001
 From: Rob Browning <rlb@defaultvalue.org>
 Date: Mon, 4 Apr 2011 22:46:25 -0500
 Subject: Adjust documentation references for Debian
@@ -12,7 +12,7 @@ appropriate, etc.
  1 file changed, 5 insertions(+)
 
 diff --git a/etc/NEWS b/etc/NEWS
-index 75bf8f5dd28..e22ff2aeb7d 100644
+index 3f94b0d4634..bb1be6f7e6d 100644
 --- a/etc/NEWS
 +++ b/etc/NEWS
 @@ -15,6 +15,11 @@ in older Emacs versions.
@@ -25,5 +25,5 @@ index 75bf8f5dd28..e22ff2aeb7d 100644
 +Please see /usr/share/doc/emacs-common/README.Debian.gz.
 +
  
- * Installation Changes in Emacs 29.1
- 
+ * Changes in Emacs 29.3
+ Emacs 29.3 is an emergency bugfix release intended to fix several
