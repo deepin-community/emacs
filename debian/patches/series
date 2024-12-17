@@ -13,3 +13,6 @@
 0013-Rename-to-inhibit-automatic-native-compilation.patch
 0014-Patch-project-vc-recognizes-git-test-for-Debian-buil.patch
 0015-Change-native-comp-async-jobs-number-default-to-1.patch
+0016-Change-native-comp-async-report-warnings-errors-to-s.patch
+0017-Mark-dired-test-bug27243-02-as-unstable-for-now.patch
+0018-Disable-flymake-included-c-header-files-test-to-fix-.patch

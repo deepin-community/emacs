@@ -1,4 +1,4 @@
-From 26155f0997470d4ac10b0295ed5c1c16e070734a Mon Sep 17 00:00:00 2001
+From 9049c97868c3e91115a6bb4425932bf224f81841 Mon Sep 17 00:00:00 2001
 From: Sean Whitton <spwhitton@spwhitton.name>
 Date: Tue, 29 Aug 2023 09:08:55 +0100
 Subject: Change native-comp-async-jobs-number default to 1
@@ -8,7 +8,7 @@ Subject: Change native-comp-async-jobs-number default to 1
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lisp/emacs-lisp/comp.el b/lisp/emacs-lisp/comp.el
-index d2c6dbe0c05..b64190a35aa 100644
+index bdd4fc125e2..cf8f5395a64 100644
 --- a/lisp/emacs-lisp/comp.el
 +++ b/lisp/emacs-lisp/comp.el
 @@ -117,7 +117,7 @@ native-comp-never-optimize-functions

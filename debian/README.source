@@ -1,0 +1,171 @@
+We use git-dpm, gbp-dch and dgit in combination.
+We expect to replace git-dpm with git-debrebase at some point.
+
+Rationale
+=========
+
+The revision control arrangment (branching, etc.) has had to
+accommodate both source-level package versioning (i.e. emacs25,
+emacs26, ...) and splitting the upstream code into two source packages
+for each release (i.e. emacs and emacs-non-dfsg), though the emacs
+packages have been unversioned, so the former doesn't apply right now.
+In any case, that's why all the refs include the source package name.
+
+The refs are prefixed with deb/ to support packaging work in a
+repository that might also be used for normal upstream development
+(say you're in both roles), such that conflicts will be unlikely.
+
+Finally, the refs include the release name to ease/normalize work
+across releases, backports, etc.
+
+Worktrees
+=========
+
+    % mkdir -p ~/src/deb/
+
+    % git clone https://git.savannah.gnu.org/git/emacs.git ~/src/emacs/
+    % cd ~/src/emacs/
+    % git -c fsck.fsckObjects=false remote add -f debian \
+        https://salsa.debian.org/rlb/deb-emacs.git
+
+    % git worktree add -b deb/emacs/d/sid/master \
+        ~/src/deb/emacs/ debian/deb/emacs/d/sid/master
+    % git worktree add -b deb/emacs-non-dfsg/d/sid/master \
+        ~/src/deb/emacs-non-dfsg/ debian/deb/emacs-non-dfsg/d/sid/master
+
+    % git config branch.deb/emacs/d/sid/master.dpmUpstreamBranch \
+        deb/emacs/d/sid/upstream
+    % git config branch.deb/emacs/d/sid/master.dpmPatchedBranch \
+        deb/emacs/d/sid/patched
+    % git config branch.deb/emacs-non-dfsg/d/sid/master.dpmUpstreamBranch \
+        deb/emacs-non-dfsg/d/sid/upstream
+    % git config branch.deb/emacs-non-dfsg/d/sid/master.dpmPatchedBranch \
+        deb/emacs-non-dfsg/d/sid/patched
+
+Merging new upstream releases
+=============================
+
+N.B.: These instructions are for those with commit rights.
+We prefer to do this ourselves, as reviewing other people's splits takes as
+long as just doing the split.
+
+Check out the relevant master branches in each of ~/src/deb/emacs/ and
+~/src/deb/emacs-non-dfsg.  In each,
+
+    % gbp dch --ignore-branch --git-author --git-log="--first-parent" \
+        -aS --meta --full -N 1:30.1+1-1
+    % git commit -am"Adjust debian/changelog for UNRELEASED 30.1+1-1 development"
+
+Diff upstream's release tags, and verify the signature on the new tag.
+
+Check out upstream branches in each worktree, and merge the release tag.
+It'll produce a big merge conflict in each case, primarily because of the DFSG
+split.
+
+You now need to resolve the conflict and review the changes, ensuring that the
+new upstream release is split between the two trees in the same way the last
+one was.  Here are various ways rlb suggests for doing that:
+
+  + Assuming deleted doc files are still non-dfsg:
+      `git status -zs | grep -zE '^DU' | cut -zb 4- | xargs -0 echo git rm`
+
+  + Check deleted-by-us to make sure license hasn't changed, etc.,
+    `git rm` any that should still be gone, e.g.:
+    * `git status -s | grep -E '^DU' | cut -b 4-`
+    * or `git status -zs | grep -zE '^DU' | cut -zb 4- | xargs -0 echo git rm`
+
+  + Look at path changes:
+    * Check additions/deletions/renames and add/remove them from each repo as
+      needed, e.g.:
+      - `git diff --diff-filter=ACRB(maybe D) --name-status emacs-29.1 emacs-29.2`
+      - `diff -u <(git ls-files --with-tree emacs-29.1) \
+	     <(git ls-files --with-tree emacs-29.2) | less`
+    * e.g. rm new files that have appeared in a non-dfsg dir like doc/emacs
+    * e.g. remove anything with gfdl invariants (front/back/sections)
+
+  + For non-dfsg, look at list (may need to add etc/NEWS..., etc.)
+  + Can check what had before via `git ls-tree deb/emacs-non-dfsg/d/sid/upstream`
+  + Possibly:
+    + `git rm -rf test lib lisp ...`
+    `git status -s | grep -E '^M ' | cut -b4- | xargs git add`
+  + Checking: `git status -s | grep -vE '^DU '`
+
+Then, again in each worktree, replacing 'emacs'->'emacs-non-dfsg',
+
+    % git -c core.whitespace=-blank-at-eol,-space-before-tab,-blank-at-eof \
+        commit -m"Merge upstream version 30.1"
+    % git tag -sm deb/emacs/v/30.1+1 deb/emacs/v/30.1+1
+    % git tag -sm deb/emacs/v/1%30.1+1 deb/emacs/v/1%30.1+1
+    % git archive --prefix=emacs-30.1+1.orig/ deb/emacs/v/30.1+1 \
+        | xz -9v >../emacs_30.1+1.orig.tar.xz
+    % pristine-tar commit ../emacs_30.1+1.orig.tar.xz deb/emacs/v/30.1+1
+    % git checkout deb/emacs/d/sid/master
+    % git dpm record-new-upstream ../emacs_30.1+1.orig.tar.xz \
+        deb/emacs/d/sid/upstream
+    % git dpm rebase-patched
+    % git dpm update-patches
+    % git commit --amend -m"Merge upstream version 30.1"
+
+Other tasks after merging a new upstream release
+------------------------------------------------
+
+    % debian/rules debian-sync # fix copyright.in
+    % git grep -F 29 debian    # find other places to update
+
+Fix patches, and d/rules, as needed.
+
+Update d/control -- at least metapackage dependencies.
+
+No new upstream version / new upstream already merged
+=====================================================
+
+Check out the correct branch.  If necessary, start work on the new upload:
+
+    % gbp dch --ignore-branch --git-author --git-log="--first-parent" -aS --meta --full
+    % git commit debian/changelog \
+        -m"Adjust debian/changelog for UNRELEASED 29.3+1-3 development"
+
+Use `Closes: N` trailers in commit messages.  Then, when ready to release,
+
+    % gbp dch --ignore-branch --git-author --git-log="--first-parent" -aR --meta --full
+    % # Edit d/changelog to reflow paragraphs, add separator lines etc.
+    % git commit debian/changelog -m"Update debian/changelog for 29.3+1-3 release"
+    % # sbuild etc.
+
+Backporting a patch from upstream
+---------------------------------
+
+    % git dpm checkout-patched
+    % git cherry-pick -x HASH..
+    % git commit --amend # we add some text of our own; see existing backports
+    % git dpm update-patches
+    % git commit --amend # for the benefit of gbp-dch, especially bug closure
+
+There is also `git dpm cherry-pick -x -e HASH` which automates most of this.
+
+Uploading
+=========
+
+Please use dgit.  A temporary repository clone is required, one for each
+source package you intend to upload, because dgit does not yet support how we
+have both src:emacs and src:emacs-non-dfsg in the same repository.
+
+    % cd ~/tmp/
+    % git clone ~/src/deb/emacs/
+    % ln ~/src/deb/emacs_29.3+1.orig.tar.xz .
+    % cd emacs
+    % dgit --dpm push-source
+    % cd ~/src/deb/emacs/
+    % git tag -sm deb/emacs/v/29.3+1-3 deb/emacs/v/29.3+1-3
+    % git tag -sm deb/emacs/v/1%29.3+1-3 deb/emacs/v/1%29.3+1-3
+    % git push --follow-tags debian BRANCH # for each branch updated
+    % rm -rf ~/tmp/emacs/
+
+Credits
+=======
+
+The repository layout, DFSG splitting and this workflow were developed mostly
+by Rob Browning.  Sean Whitton updated the workflow in a few respects, adding
+the use of worktrees, and prepared and published this documentation.
+
+ -- Rob Browning <rlb@defaultvalue.org>, Wed, 15 May 2024 00:45:46 -0500

@@ -1,0 +1,54 @@
+From fdce3dad91c479fd1b7a1c12a0b482a3a4b05fd1 Mon Sep 17 00:00:00 2001
+From: Rob Browning <rlb@defaultvalue.org>
+Date: Sat, 29 Jun 2024 11:01:56 -0500
+Subject: Mark dired-test-bug27243-02 as unstable for now
+
+This appears to be a known issue:
+
+  https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27243#64
+  https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27243#115
+
+Sample failure:
+
+  Test dired-test-bug27243-02 backtrace:
+    signal(ert-test-failed (((should (eq (point) pt1)) :form (eq 176 179
+    ert-fail(((should (eq (point) pt1)) :form (eq 176 179) :value nil))
+    #f(compiled-function () #<bytecode -0xdd3f9b8b64b2928>)()
+    ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+    ert-run-test(#s(ert-test :name dired-test-bug27243-02 :documentation
+    ert-run-or-rerun-test(#s(ert--stats :selector (not ...) :tests [...
+    ert-run-tests((not (or (tag :expensive-test) (tag :unstable))) #f(co
+    ert-run-tests-batch((not (or (tag :expensive-test) (tag :unstable)))
+    ert-run-tests-batch-and-exit((not (or (tag :expensive-test) (tag :un
+    command-line-1(("-L" ":/<<PKGBUILDDIR>>/debian/
+    command-line()
+    normal-top-level()
+  Test dired-test-bug27243-02 condition:
+      (ert-test-failed
+       ((should
+         (eq
+          (point)
+          pt1))
+        :form
+        (eq 176 179)
+        :value nil))
+     FAILED   5/16  dired-test-bug27243-02 (0.010115 sec) at ../../build-src/test/lisp/dired-tests.el:189
+
+Bug: https://debbugs.gnu.org/27243
+Forwarded: not-needed
+---
+ test/lisp/dired-tests.el | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/test/lisp/dired-tests.el b/test/lisp/dired-tests.el
+index 2589281e5e1..ea570fdf1a0 100644
+--- a/test/lisp/dired-tests.el
++++ b/test/lisp/dired-tests.el
+@@ -188,6 +188,7 @@ dired-test-bug27243-01
+ 
+ (ert-deftest dired-test-bug27243-02 ()
+   "Test for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27243#28 ."
++  :tags '(:unstable)
+   (ert-with-temp-directory test-dir
+     (let ((dired-auto-revert-buffer t) buffers)
+       ;; On MS-Windows, get rid of 8+3 short names in test-dir, if the

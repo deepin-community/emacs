@@ -1,4 +1,4 @@
-From 8fff656e51bc7d8ad1842fe0ba2055a0fe16bd86 Mon Sep 17 00:00:00 2001
+From 32f60e66a38f368a49e08f6755f44b500326fa84 Mon Sep 17 00:00:00 2001
 From: Rob Browning <rlb@defaultvalue.org>
 Date: Mon, 4 Apr 2011 22:46:24 -0500
 Subject: Remove files that appear to be incompatible with the DFSG
@@ -29,7 +29,7 @@ Status: new
  4 files changed, 36 insertions(+), 75 deletions(-)
 
 diff --git a/Makefile.in b/Makefile.in
-index f5fda0eb61a..8bad8563582 100644
+index 996f7b8d8c7..c3786164718 100644
 --- a/Makefile.in
 +++ b/Makefile.in
 @@ -174,7 +174,9 @@ man1dir=
@@ -43,7 +43,7 @@ index f5fda0eb61a..8bad8563582 100644
  
  # Directory for local state files for all programs.
  localstatedir=@localstatedir@
-@@ -984,8 +986,7 @@ $(1)_$(2):
+@@ -989,8 +991,7 @@ $(1)_$(2):
  ###      normally don't want to recompile.  For example, the 'mostlyclean'
  ###      target for GCC does not delete 'libgcc.a', because recompiling it
  ###      is rarely necessary and takes a lot of time.
@@ -53,7 +53,7 @@ index f5fda0eb61a..8bad8563582 100644
  
  $(foreach dir,$(mostlyclean_dirs),$(eval $(call submake_template,$(dir),mostlyclean)))
  
-@@ -1106,11 +1107,11 @@ test/%:
+@@ -1111,11 +1112,11 @@ test/%:
  dist:
  	cd ${srcdir}; ./make-dist
  
@@ -70,7 +70,7 @@ index f5fda0eb61a..8bad8563582 100644
  
  DOCS = $(DVIS) $(HTMLS) $(INFOS) $(PDFS) $(PSS)
  $(DOCS):
-@@ -1141,9 +1142,6 @@ info-dir:
+@@ -1146,9 +1147,6 @@ info-dir:
  texi_misc = $(shell MAKEFLAGS= ${MAKE} --no-print-directory -s -C doc/misc echo-sources)
  
  srcdir_doc_info_dir_inputs = \
@@ -80,7 +80,7 @@ index f5fda0eb61a..8bad8563582 100644
    $(addprefix ${srcdir}/doc/misc/,${texi_misc})
  info_dir_inputs = \
    ../build-aux/dir_top \
-@@ -1165,14 +1163,10 @@ ${srcdir}/info/dir:
+@@ -1170,14 +1168,10 @@ ${srcdir}/info/dir:
  	 AWK='${AWK}' ../build-aux/make-info-dir ${info_dir_inputs} \
  	) >$@.tmp && mv $@.tmp $@
  
@@ -99,7 +99,7 @@ index f5fda0eb61a..8bad8563582 100644
  INSTALL_DOC = $(INSTALL_DVI) $(INSTALL_HTML) $(INSTALL_PDF) $(INSTALL_PS)
  
  ## Install non .info forms of the documentation.
-@@ -1190,14 +1184,10 @@ install-pdf:
+@@ -1195,14 +1189,10 @@ install-pdf:
  install-ps: $(INSTALL_PS)
  
  
@@ -119,10 +119,10 @@ index f5fda0eb61a..8bad8563582 100644
  
  $(UNINSTALL_DOC):
 diff --git a/configure.ac b/configure.ac
-index ad1068a70ad..17e77b36cc9 100644
+index eca50251f2a..d46be651720 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -6798,7 +6798,7 @@ AC_DEFUN
+@@ -6800,7 +6800,7 @@ AC_DEFUN
  AC_CONFIG_FILES([$srcdir/doc/man/emacs.1])
  
  m4_define([subdir_makefiles],
@@ -131,7 +131,7 @@ index ad1068a70ad..17e77b36cc9 100644
  SUBDIR_MAKEFILES="subdir_makefiles"
  AC_CONFIG_FILES(subdir_makefiles)
  
-@@ -6864,14 +6864,11 @@ m4_define
+@@ -6866,14 +6866,11 @@ m4_define
  fi
  ])
  
@@ -152,7 +152,7 @@ index ad1068a70ad..17e77b36cc9 100644
  dnl If we give this the more natural name, etc/refcards/emacsver.texi,
  dnl then a directory etc/refcards is created in the build directory,
 diff --git a/doc/misc/Makefile.in b/doc/misc/Makefile.in
-index 1831bbbb73f..45d84062829 100644
+index 2841916dc89..0abfd543a3f 100644
 --- a/doc/misc/Makefile.in
 +++ b/doc/misc/Makefile.in
 @@ -63,18 +63,14 @@ INSTALL_DATA =
@@ -236,10 +236,10 @@ index 1831bbbb73f..45d84062829 100644
  abs_top_builddir = @abs_top_builddir@
  
 diff --git a/lisp/help.el b/lisp/help.el
-index 6eac037df2c..8f341e992e3 100644
+index 24e4b9890a7..2922cbd2618 100644
 --- a/lisp/help.el
 +++ b/lisp/help.el
-@@ -496,6 +496,14 @@ view-help-file
+@@ -511,6 +511,14 @@ view-help-file
    (goto-address-mode 1)
    (goto-char (point-min)))
  

@@ -1,4 +1,4 @@
-From 60a7044176a03ce23dfa57367b0919ab45c47b7d Mon Sep 17 00:00:00 2001
+From e7334f78e4b3037da7242a65824470b57aacb067 Mon Sep 17 00:00:00 2001
 From: Sean Whitton <spwhitton@spwhitton.name>
 Date: Tue, 15 Nov 2022 16:26:59 -0700
 Subject: Mark flaky test process-tests/multiple-threads-waiting as unstable
@@ -32,7 +32,7 @@ It times out:
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/test/src/process-tests.el b/test/src/process-tests.el
-index c3b4e17dbc0..2afc1ece248 100644
+index 15d46cbae15..744a3e371fe 100644
 --- a/test/src/process-tests.el
 +++ b/test/src/process-tests.el
 @@ -895,7 +895,7 @@ process-tests/sentinel-with-multiple-processes

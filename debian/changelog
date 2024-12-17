@@ -1,3 +1,128 @@
+emacs (1:29.4+1-4) unstable; urgency=medium
+
+  * 00debian.el: Mark file with 'lexical-binding: t'.
+  * 00debian.el: Use setopt, not setq.
+  
+  * Suggest emacs-editing-major-modes.
+  
+  * Disable flymake included-c-header-files test to fix build with
+    gcc-14 (Closes: #1074936).
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Sun, 08 Dec 2024 13:38:47 +0800
+
+emacs (1:29.4+1-3) unstable; urgency=high
+
+  * Mark dired-test-bug27243-02 as unstable for now.
+    This appears to be a known issue:
+      https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27243#64
+      https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27243#115
+    Add 0017-Mark-dired-test-bug27243-02-as-unstable-for-now.patch to
+    address it.
+
+ -- Rob Browning <rlb@defaultvalue.org>  Sat, 29 Jun 2024 15:46:01 -0500
+
+emacs (1:29.4+1-2) unstable; urgency=medium
+
+  * Minor edits to README.source.
+  * Merge divergent branches of development.
+    These were accidentally introduced by the previous upload.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Tue, 25 Jun 2024 13:20:34 +0800
+
+emacs (1:29.4+1-1) unstable; urgency=medium
+
+  * Merge upstream version 29.4. (Closes: 1074137)
+  * Update debian/copyright for 29.4.
+
+ -- Rob Browning <rlb@defaultvalue.org>  Mon, 24 Jun 2024 19:34:05 -0500
+
+emacs (1:29.3+1-3) unstable; urgency=medium
+
+  [ Sean Whitton ]
+  * README.source: document our workflows.
+
+  [ Rob Browning ]
+  * README.source: add rationale.
+
+  [ Xiyue Deng ]
+  * Only install the GSettings schema in the pgtk build.  Move
+    /usr/share/glib-2.0/schemas/org.gnu.emacs.defaults.gschema.xml from
+    emacs-common to emacs-pgtk so that it won't trigger the addition of a
+    gsettings dependency for flavors that don't use it. (Closes: 1050393)
+
+ -- Rob Browning <rlb@defaultvalue.org>  Wed, 15 May 2024 00:37:47 -0500
+
+emacs (1:29.3+1-2) unstable; urgency=medium
+
+  * Change native-comp-async-report-warnings-errors to `silent'.
+
+  * d/rules: Enable running tests concurrently.
+    Thanks Arto Jantunen for the patch.
+
+  * Fix installation of desktop files for emacs-nox.
+    Thanks to Brendan O'Dea for the report and fix. (Closes: #1069294)
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Sat, 20 Apr 2024 07:52:47 +0100
+
+emacs (1:29.3+1-1) unstable; urgency=high
+
+  * Merge upstream version 29.3.  Thanks to David Bremner for the
+    report. (Closes: 1067630)
+
+  * Update debian/copyright for 29.3
+
+ -- Rob Browning <rlb@defaultvalue.org>  Sun, 24 Mar 2024 16:30:50 -0500
+
+emacs (1:29.2+1-2) unstable; urgency=medium
+
+  * Fix Breaks/Replaces by prepending missing epoch (Closes: #1064851)
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Tue, 27 Feb 2024 09:26:29 +0800
+
+emacs (1:29.2+1-1) unstable; urgency=medium
+
+  [ Rob Browning ]
+  * Give each Emacs flavor its own emacsclient.
+    Move emacsclient from emacs-bin-common to the emacsVER (i.e.
+    emacs-lucid, emacs-gtk, ...) packages so that each one will have the
+    binary that was built for that flavor.
+
+    Explicitly list the variant and common bin alternatives instead of
+    globbing.  Add the alternatives variables to deb_sub so we don't need
+    the separate perl -i substitutions.
+
+    Stop splitting some of the debian/rules $(call ...) invocations across
+    two lines because it was introducing a space into the argument value
+    which would then break quoted expansions like "$(1)...".
+
+    Thanks to Wang Yizhen & others for discussion.
+    Closes: #1050953.  See also: #1043060.
+
+  * Generate README.Debian from patch README-Debian psuedo-headers.
+
+    Rework debian/patch-to-news to generate the README.Debian entry from a
+    README-Debian DEP-3-style psuedo-header, when present.  The header's
+    syntax is similar to the debian/control Description format.  Among
+    other things, this change makes the common case of cherry-picking
+    upstream patches easier, and less invasive, since in many cases, a
+    simple README-Debian header can be appended while adding the other
+    headers, instead of (as previously) reindenting the upstream commit, etc.
+
+  * Adjust debian/patches for the new patch-to-news.
+
+  * debian/emacs-common.README.in: drop vestigial ".elc removal" notice.
+    Long irrelevant since switching to base the packaging on the upstream
+    source repository.
+
+  * debian/emacs-common.README.in: match NEWS mode/format vars.
+
+  [ Sean Whitton ]
+  * Merge upstream version 29.2.
+
+  * debian/control: Add Breaks/Replaces for emacsclient package move.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 26 Feb 2024 16:55:58 +0800
+
 emacs (1:29.1+1-5) unstable; urgency=medium
 
   * Don't try to build with native compilation on riscv64 (Closes: #1050653).
