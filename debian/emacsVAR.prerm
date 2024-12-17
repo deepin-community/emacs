@@ -2,11 +2,14 @@
 
 set -e
 
-# update-alternatives on things that collide with xemacs, other editors
 if [ "$1" != upgrade ]
 then
-  update-alternatives --verbose --remove editor /usr/bin/emacs
-  update-alternatives --verbose --remove emacs /usr/bin/emacs-@X_SUPPORT@
+    update-alternatives --verbose --remove editor /usr/bin/emacs
+    update-alternatives --verbose --remove emacs /usr/bin/emacs-@X_SUPPORT@
+    for alt in @DEB_VAR_ALTERNATIVES@
+    do
+        update-alternatives --remove "$alt" "/usr/bin/$alt.emacs"
+    done
 fi
 
 # emacsen-common registration.

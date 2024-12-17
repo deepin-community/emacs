@@ -1,4 +1,4 @@
-From 3d9b8aa890c41da85ce4e8fb863ba719406aa0f8 Mon Sep 17 00:00:00 2001
+From e2410aeb9e56b3a4fcb074f7d34dc47fa0cfc361 Mon Sep 17 00:00:00 2001
 From: Lars Ingebrigtsen <larsi@gnus.org>
 Date: Mon, 3 Oct 2022 19:49:53 +0200
 Subject: Rename to 'inhibit-automatic-native-compilation'
@@ -18,17 +18,16 @@ The following upstream patch has been backported:
 Origin: upstream, commit f97993ee667f9be7589825f3a4fbc095d6944ec6
 Forwarded: not-needed
 ---
- lisp/emacs-lisp/comp.el      | 2 +-
- lisp/progmodes/elisp-mode.el | 4 ++--
- lisp/startup.el              | 7 ++++---
- src/comp.c                   | 7 ++++---
- 4 files changed, 11 insertions(+), 9 deletions(-)
+ lisp/emacs-lisp/comp.el | 2 +-
+ lisp/startup.el         | 7 ++++---
+ src/comp.c              | 7 ++++---
+ 3 files changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/lisp/emacs-lisp/comp.el b/lisp/emacs-lisp/comp.el
-index 52702cab5c9..d2c6dbe0c05 100644
+index 651eaa3adc0..bdd4fc125e2 100644
 --- a/lisp/emacs-lisp/comp.el
 +++ b/lisp/emacs-lisp/comp.el
-@@ -3814,7 +3814,7 @@ comp--trampoline-abs-filename
+@@ -3813,7 +3813,7 @@ comp--trampoline-abs-filename
    "Return the absolute filename for a trampoline for SUBR-NAME."
    ;; If we've disabled nativecomp, don't write the trampolines to
    ;; the eln cache (but create them).
@@ -37,23 +36,8 @@ index 52702cab5c9..d2c6dbe0c05 100644
         (cl-loop
  	with dirs = (if (stringp native-comp-enable-subr-trampolines)
  			(list (expand-file-name native-comp-enable-subr-trampolines
-diff --git a/lisp/progmodes/elisp-mode.el b/lisp/progmodes/elisp-mode.el
-index 4f735f2e5a8..4561f2d0d28 100644
---- a/lisp/progmodes/elisp-mode.el
-+++ b/lisp/progmodes/elisp-mode.el
-@@ -222,8 +222,8 @@ emacs-lisp-native-compile-and-load
- Load the compiled code when finished.
- 
- Use `emacs-lisp-byte-compile-and-load' in combination with
--`inhibit-native-compilation' set to nil to achieve asynchronous
--native compilation."
-+`inhibit-automatic-native-compilation' set to nil to achieve
-+asynchronous native compilation."
-   (interactive nil emacs-lisp-mode)
-   (emacs-lisp--before-compile-buffer)
-   (let ((byte+native-compile t)
 diff --git a/lisp/startup.el b/lisp/startup.el
-index ac17b645f15..b89f9cd95da 100644
+index 45e41a7c951..5f14b585390 100644
 --- a/lisp/startup.el
 +++ b/lisp/startup.el
 @@ -546,7 +546,7 @@ startup--honor-delayed-native-compilations
@@ -85,7 +69,7 @@ index ac17b645f15..b89f9cd95da 100644
  
        ;; Form `native-comp-eln-load-path'.
 diff --git a/src/comp.c b/src/comp.c
-index 06ddb956bb5..136b5e8fe5d 100644
+index 46b81cb1aae..41078f41d52 100644
 --- a/src/comp.c
 +++ b/src/comp.c
 @@ -5179,7 +5179,7 @@ maybe_defer_native_compilation (Lisp_Object function_name,

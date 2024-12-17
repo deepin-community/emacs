@@ -1,4 +1,4 @@
-From fc921c4b1cc74d40c09c2a6653c57a34bdc5da84 Mon Sep 17 00:00:00 2001
+From 5183f8852718af767f9c16acd18ef689e35ef039 Mon Sep 17 00:00:00 2001
 From: Lars Ingebrigtsen <larsi@gnus.org>
 Date: Mon, 3 Oct 2022 15:26:04 +0200
 Subject: Add 'inhibit-native-compilation'
@@ -23,17 +23,16 @@ The following upstream patch has been backported:
 Origin: upstream, commit: 5fec9182dbeffa88cef6651d8c798ef9665d6681
 Forwarded: not-needed
 ---
- lisp/emacs-lisp/comp.el      | 47 +++++++++++++++++++-----------------
- lisp/progmodes/elisp-mode.el |  2 +-
- lisp/startup.el              |  7 ++++--
- src/comp.c                   |  8 ++++++
- 4 files changed, 39 insertions(+), 25 deletions(-)
+ lisp/emacs-lisp/comp.el | 47 ++++++++++++++++++++++-------------------
+ lisp/startup.el         |  7 ++++--
+ src/comp.c              |  8 +++++++
+ 3 files changed, 38 insertions(+), 24 deletions(-)
 
 diff --git a/lisp/emacs-lisp/comp.el b/lisp/emacs-lisp/comp.el
-index 322df0e86a1..52702cab5c9 100644
+index a3c6bb59469..651eaa3adc0 100644
 --- a/lisp/emacs-lisp/comp.el
 +++ b/lisp/emacs-lisp/comp.el
-@@ -3812,28 +3812,31 @@ comp-trampoline-search
+@@ -3811,28 +3811,31 @@ comp-trampoline-search
  
  (defun comp--trampoline-abs-filename (subr-name)
    "Return the absolute filename for a trampoline for SUBR-NAME."
@@ -87,21 +86,8 @@ index 322df0e86a1..52702cab5c9 100644
  
  (defun comp-trampoline-compile (subr-name)
    "Synthesize compile and return a trampoline for SUBR-NAME."
-diff --git a/lisp/progmodes/elisp-mode.el b/lisp/progmodes/elisp-mode.el
-index 956e3d30bce..4f735f2e5a8 100644
---- a/lisp/progmodes/elisp-mode.el
-+++ b/lisp/progmodes/elisp-mode.el
-@@ -222,7 +222,7 @@ emacs-lisp-native-compile-and-load
- Load the compiled code when finished.
- 
- Use `emacs-lisp-byte-compile-and-load' in combination with
--`native-comp-jit-compilation' set to t to achieve asynchronous
-+`inhibit-native-compilation' set to nil to achieve asynchronous
- native compilation."
-   (interactive nil emacs-lisp-mode)
-   (emacs-lisp--before-compile-buffer)
 diff --git a/lisp/startup.el b/lisp/startup.el
-index d6e1c23fa28..ac17b645f15 100644
+index ccfcfee8f0e..45e41a7c951 100644
 --- a/lisp/startup.el
 +++ b/lisp/startup.el
 @@ -546,7 +546,7 @@ startup--honor-delayed-native-compilations
@@ -133,7 +119,7 @@ index d6e1c23fa28..ac17b645f15 100644
  
        ;; Form `native-comp-eln-load-path'.
 diff --git a/src/comp.c b/src/comp.c
-index 59c9e9619a3..06ddb956bb5 100644
+index 8428cf9020e..46b81cb1aae 100644
 --- a/src/comp.c
 +++ b/src/comp.c
 @@ -5179,6 +5179,7 @@ maybe_defer_native_compilation (Lisp_Object function_name,

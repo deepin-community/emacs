@@ -1,23 +1,99 @@
-#!/bin/bash
+#!/usr/bin/perl -w
 
-set -eo pipefail
+use English;
+use File::Basename;
+use strict;
 
-patch="$1"
+## Given a patch file paths on the command line,
+## e.g. debian/patches/*.patch (or quilt series), generate blank-line
+## separate entries formated for README.Debian.  If a patch file
+## doesn't contain a "README-Debian:" pseudo-header, then just include
+## the entire commit message.  If it does include the header, then
+## parse it roughly like a debian/control "Description:" field.  In
+## particular, any blank line ends the header, continuation lines must
+## start with a single space, and blank lines can be included in the
+## content via lines contining just a space and a full stop ".".
+## Currently, there is also no reformatting, so all lines are
+## "verbatim", not just lines starting with a double space.
 
-sed '
-  # delete everything after the first line starting with "--- " (the diff)
-  /^--- [^ ]/,$d' < "$patch" \
-| tac \
-| sed '
-  # delete everything up to the first line containing only "---" (the diffstat)
-  1,/^---$/d' \
-| tac \
-| sed '
-  # delete everything before the first blank line (git summary line)
-  1,/^$/d' \
-| sed '
-  # convert to our README.Debian NEWS format
-  1 s/^/* /
-  2,$ s/^/  /'
+sub get_patch_readme
+{
+    my ($patch) = @_;
+    open(PATCH, '<', $patch) or die "Unable to open $patch: $!";
+    my @header = <PATCH>;
+    close PATCH;
+    chomp @header;
 
-echo "  Patch: $(basename $patch)"
+    my @result;
+    my $in_header = 0;
+    foreach my $line (@header) {
+        last if $line eq '---';
+        if ($line =~ m/^README-Debian:\s*(.*)/gio) {
+            push @result, $1;
+            $in_header = 1;
+        } elsif ($line =~ m/^\S*$/o) {
+            $in_header = 0;
+        } elsif ($in_header) {
+            if ($line eq ' .') {
+                push @result, '';
+            } elsif (substr($line, 0, 2) eq ' .') {
+                die "Invalid ' .' prefix in line: '$line'";
+            } elsif ($line =~ m/^ (.*)/o) {
+                push @result, $1;
+            } else {
+                $in_header = 0;
+            }
+        }
+    }
+
+    if (!scalar(@result)) {
+        # No README-Debian, include the whole message
+        my $i = 0;
+        my $subject;
+        foreach my $line (@header) {
+            if ($line =~ m/^Subject:\s*(.*)/io) {
+                $subject = $1;
+            }
+            $i++;
+            last if $line eq '';
+        }
+        die 'No subject in patch' unless $subject;
+        push @result, $subject;
+        while ($i < scalar(@header)) {
+            last if $header[$i] eq '---';
+            push @result, $header[$i];
+            $i++;
+        }
+    }
+
+    # Remove trailing blank lines
+    while ($result[-1] eq '') { pop @result; }
+    return \@result;
+}
+
+sub render_patch_readme
+{
+    my ($patch) = @_;
+    my $news = get_patch_readme($patch);
+    my $base = basename($patch);
+    print "* @$news[0]\n";
+    my $news_len = scalar(@$news);
+    foreach my $line (@$news[1..$news_len - 1]) {
+        print "$line\n";
+    }
+    print "\n" if scalar(@$news) > 1;
+    print "Patch: $base\n";
+}
+
+my @patches = @ARGV;
+my $patch_count = @patches;
+
+if ($patch_count)
+{
+    render_patch_readme($patches[0]);
+    foreach my $patch (@patches[1..$patch_count - 1])
+    {
+        print "\n";
+        render_patch_readme($patch);
+    }
+}
