@@ -1,4 +1,4 @@
-From d2503968b147b87f0112d6dbcb47448b76f3344f Mon Sep 17 00:00:00 2001
+From d51e992d42718c12d427f9d3d7004e8143c5ceea Mon Sep 17 00:00:00 2001
 From: Rob Browning <rlb@defaultvalue.org>
 Date: Sun, 16 Dec 2018 17:13:36 -0600
 Subject: Mark vc-bzr-test-fauilt-bzr-autoloads as unstable for now
@@ -61,7 +61,7 @@ Currently the test fails like this:
  1 file changed, 1 insertion(+)
 
 diff --git a/test/lisp/vc/vc-bzr-tests.el b/test/lisp/vc/vc-bzr-tests.el
-index 8ed63d11a8f..085ef20e9c8 100644
+index 487dc66cb73..a1d2b056850 100644
 --- a/test/lisp/vc/vc-bzr-tests.el
 +++ b/test/lisp/vc/vc-bzr-tests.el
 @@ -119,6 +119,7 @@ vc-bzr-test-bug9781

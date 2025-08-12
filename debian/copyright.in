@@ -237,6 +237,8 @@ Files:
  etc/images/attach.xpm
  etc/images/bookmark_add.pbm
  etc/images/bookmark_add.xpm
+ etc/images/commit.pbm
+ etc/images/commit.xpm
  etc/images/cancel.pbm
  etc/images/cancel.xpm
  etc/images/connect.pbm
@@ -253,6 +255,12 @@ Files:
  etc/images/disconnect.xpm
  etc/images/exit.pbm
  etc/images/exit.xpm
+ etc/images/gen-changelog.pbm
+ etc/images/gen-changelog.xpm
+ etc/images/ins-changelog.pbm
+ etc/images/ins-changelog.xpm
+ etc/images/load-changelog.pbm
+ etc/images/load-changelog.xpm
  etc/images/lock-broken.pbm
  etc/images/lock-broken.xpm
  etc/images/lock-ok.pbm
@@ -287,6 +295,8 @@ Files:
  etc/images/sort-row-ascending.xpm
  etc/images/up-node.pbm
  etc/images/up-node.xpm
+ etc/images/view-diff.pbm
+ etc/images/view-diff.xpm
  etc/images/zoom-in.pbm
  etc/images/zoom-in.xpm
  etc/images/zoom-out.pbm

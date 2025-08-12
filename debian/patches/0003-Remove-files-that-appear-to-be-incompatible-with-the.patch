@@ -1,4 +1,4 @@
-From 32f60e66a38f368a49e08f6755f44b500326fa84 Mon Sep 17 00:00:00 2001
+From d293e2f1023e9da87d0e5b0cad6e5df2e1decd15 Mon Sep 17 00:00:00 2001
 From: Rob Browning <rlb@defaultvalue.org>
 Date: Mon, 4 Apr 2011 22:46:24 -0500
 Subject: Remove files that appear to be incompatible with the DFSG
@@ -23,13 +23,13 @@ Added-by: Rob Browning <rlb@defaultvalue.org>
 Status: new
 ---
  Makefile.in          | 44 +++++++++++++++++---------------------------
- configure.ac         | 15 ++++++---------
+ configure.ac         | 18 +++++++-----------
  doc/misc/Makefile.in | 44 +++++---------------------------------------
  lisp/help.el         |  8 ++++++++
- 4 files changed, 36 insertions(+), 75 deletions(-)
+ 4 files changed, 37 insertions(+), 77 deletions(-)
 
 diff --git a/Makefile.in b/Makefile.in
-index 996f7b8d8c7..c3786164718 100644
+index a89836dca2c..b3fd05a23bb 100644
 --- a/Makefile.in
 +++ b/Makefile.in
 @@ -174,7 +174,9 @@ man1dir=
@@ -43,7 +43,7 @@ index 996f7b8d8c7..c3786164718 100644
  
  # Directory for local state files for all programs.
  localstatedir=@localstatedir@
-@@ -989,8 +991,7 @@ $(1)_$(2):
+@@ -1005,8 +1007,7 @@ $(1)_$(2):
  ###      normally don't want to recompile.  For example, the 'mostlyclean'
  ###      target for GCC does not delete 'libgcc.a', because recompiling it
  ###      is rarely necessary and takes a lot of time.
@@ -51,9 +51,9 @@ index 996f7b8d8c7..c3786164718 100644
 -  doc/lispref doc/lispintro test
 +mostlyclean_dirs = src oldXMenu lwlib lib lib-src nt doc/misc test
  
- $(foreach dir,$(mostlyclean_dirs),$(eval $(call submake_template,$(dir),mostlyclean)))
- 
-@@ -1111,11 +1112,11 @@ test/%:
+ ### Add the libexec directory to mostlyclean_dirs if its Makefile has
+ ### been created.
+@@ -1136,11 +1137,11 @@ test/%:
  dist:
  	cd ${srcdir}; ./make-dist
  
@@ -70,7 +70,7 @@ index 996f7b8d8c7..c3786164718 100644
  
  DOCS = $(DVIS) $(HTMLS) $(INFOS) $(PDFS) $(PSS)
  $(DOCS):
-@@ -1146,9 +1147,6 @@ info-dir:
+@@ -1171,9 +1172,6 @@ info-dir:
  texi_misc = $(shell MAKEFLAGS= ${MAKE} --no-print-directory -s -C doc/misc echo-sources)
  
  srcdir_doc_info_dir_inputs = \
@@ -80,7 +80,7 @@ index 996f7b8d8c7..c3786164718 100644
    $(addprefix ${srcdir}/doc/misc/,${texi_misc})
  info_dir_inputs = \
    ../build-aux/dir_top \
-@@ -1170,14 +1168,10 @@ ${srcdir}/info/dir:
+@@ -1195,14 +1193,10 @@ ${srcdir}/info/dir:
  	 AWK='${AWK}' ../build-aux/make-info-dir ${info_dir_inputs} \
  	) >$@.tmp && mv $@.tmp $@
  
@@ -99,7 +99,7 @@ index 996f7b8d8c7..c3786164718 100644
  INSTALL_DOC = $(INSTALL_DVI) $(INSTALL_HTML) $(INSTALL_PDF) $(INSTALL_PS)
  
  ## Install non .info forms of the documentation.
-@@ -1195,14 +1189,10 @@ install-pdf:
+@@ -1220,14 +1214,10 @@ install-pdf:
  install-ps: $(INSTALL_PS)
  
  
@@ -119,40 +119,45 @@ index 996f7b8d8c7..c3786164718 100644
  
  $(UNINSTALL_DOC):
 diff --git a/configure.ac b/configure.ac
-index eca50251f2a..d46be651720 100644
+index cf274c0cffd..5ab0d6082f2 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -6800,7 +6800,7 @@ AC_DEFUN
- AC_CONFIG_FILES([$srcdir/doc/man/emacs.1])
+@@ -7837,11 +7837,10 @@ AC_DEFUN
  
- m4_define([subdir_makefiles],
--  [lib/Makefile lib-src/Makefile oldXMenu/Makefile doc/emacs/Makefile doc/misc/Makefile doc/lispintro/Makefile doc/lispref/Makefile src/Makefile lwlib/Makefile lisp/Makefile leim/Makefile nextstep/Makefile nt/Makefile])
-+  [lib/Makefile lib-src/Makefile oldXMenu/Makefile doc/misc/Makefile src/Makefile lwlib/Makefile lisp/Makefile leim/Makefile nextstep/Makefile nt/Makefile])
- SUBDIR_MAKEFILES="subdir_makefiles"
- AC_CONFIG_FILES(subdir_makefiles)
+ AC_CONFIG_FILES([lib/Makefile lib-src/Makefile oldXMenu/Makefile src/Makefile
+                  lwlib/Makefile nextstep/Makefile nt/Makefile])
+-ARCH_INDEPENDENT_CONFIG_FILES([doc/emacs/Makefile doc/misc/Makefile
+-                               doc/lispintro/Makefile doc/lispref/Makefile
++ARCH_INDEPENDENT_CONFIG_FILES([doc/misc/Makefile
+ 			       lisp/Makefile leim/Makefile])
  
-@@ -6866,14 +6866,11 @@ m4_define
- fi
- ])
+-SUBDIR_MAKEFILES="lib/Makefile lib-src/Makefile oldXMenu/Makefile src/Makefile lwlib/Makefile nextstep/Makefile nt/Makefile doc/emacs/Makefile doc/misc/Makefile doc/lispintro/Makefile doc/lispref/Makefile lisp/Makefile leim/Makefile"
++SUBDIR_MAKEFILES="lib/Makefile lib-src/Makefile oldXMenu/Makefile src/Makefile lwlib/Makefile nextstep/Makefile nt/Makefile doc/misc/Makefile lisp/Makefile leim/Makefile"
  
--dnl Perhaps this would be better named doc-emacs-emacsver.texi?
--dnl See comments for etc-refcards-emacsver.tex.
--dnl Since we get a doc/emacs directory generated anyway, for the Makefile,
--dnl it is not quite the same.  But we are generating in $srcdir.
--AC_CONFIG_COMMANDS([doc/emacs/emacsver.texi], [
--${MAKE-make} -s --no-print-directory -C doc/emacs doc-emacsver || \
--AC_MSG_ERROR(['doc/emacs/emacsver.texi' could not be made.])
--])
-+# This file is normally generated indirectly via
-+# doc/emacs/Makefile.in, but since we've removed the other doc/emacs
-+# files for the DFSG split, and we don't have any prebuilt info files,
-+# generate it directly here.
-+AC_CONFIG_FILES([doc/emacs/emacsver.texi])
+ dnl The test/ directory is missing if './make-dist --no-tests' was used.
+ opt_makefile=test/Makefile
+@@ -7913,14 +7912,11 @@ AC_DEFUN
+   fi
+   ])
  
- dnl If we give this the more natural name, etc/refcards/emacsver.texi,
- dnl then a directory etc/refcards is created in the build directory,
+-  dnl Perhaps this would be better named doc-emacs-emacsver.texi?
+-  dnl See comments for etc-refcards-emacsver.tex.
+-  dnl Since we get a doc/emacs directory generated anyway, for the Makefile,
+-  dnl it is not quite the same.  But we are generating in $srcdir.
+-  AC_CONFIG_COMMANDS([doc/emacs/emacsver.texi], [
+-  ${MAKE-make} -s --no-print-directory -C doc/emacs doc-emacsver || \
+-  AC_MSG_ERROR(['doc/emacs/emacsver.texi' could not be made.])
+-  ])
++  # This file is normally generated indirectly via
++  # doc/emacs/Makefile.in, but since we've removed the other doc/emacs
++  # files for the DFSG split, and we don't have any prebuilt info files,
++  # generate it directly here.
++  AC_CONFIG_FILES([doc/emacs/emacsver.texi])
+ 
+   dnl If we give this the more natural name, etc/refcards/emacsver.texi,
+   dnl then a directory etc/refcards is created in the build directory,
 diff --git a/doc/misc/Makefile.in b/doc/misc/Makefile.in
-index 2841916dc89..0abfd543a3f 100644
+index 3e21a61f9ea..5c66f00dc09 100644
 --- a/doc/misc/Makefile.in
 +++ b/doc/misc/Makefile.in
 @@ -63,18 +63,14 @@ INSTALL_DATA =
@@ -236,10 +241,10 @@ index 2841916dc89..0abfd543a3f 100644
  abs_top_builddir = @abs_top_builddir@
  
 diff --git a/lisp/help.el b/lisp/help.el
-index 24e4b9890a7..2922cbd2618 100644
+index 1d87c2209c8..3fa0b65488f 100644
 --- a/lisp/help.el
 +++ b/lisp/help.el
-@@ -511,6 +511,14 @@ view-help-file
+@@ -523,6 +523,14 @@ view-help-file
    (goto-address-mode 1)
    (goto-char (point-min)))
  

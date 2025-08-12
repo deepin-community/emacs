@@ -1,0 +1,27 @@
+From 2c784d2bc319a00160f8c911d00d1a4978e2ac22 Mon Sep 17 00:00:00 2001
+From: Sean Whitton <spwhitton@spwhitton.name>
+Date: Wed, 26 Feb 2025 16:13:44 +0800
+Subject: Disable server-tests/server-force-stop/keeps-frames on riscv64
+
+This test often hangs on the Debian buildds.
+It simply fails on a porterbox, at least for the emacs-nox phase
+of the build, though seemingly not the emacs-lucid phase.
+---
+ test/lisp/server-tests.el | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/test/lisp/server-tests.el b/test/lisp/server-tests.el
+index 444c2f99fa7..02106808518 100644
+--- a/test/lisp/server-tests.el
++++ b/test/lisp/server-tests.el
+@@ -195,7 +195,9 @@ server-tests/server-force-stop/keeps-frames
+ tests that `server-force-stop' doesn't delete frames (and even
+ then, requires a few tricks to run as a regression test).  So
+ long as this works, the problem in bug#58877 shouldn't occur."
+-  (skip-unless server-tests/can-create-frames-p)
++  (skip-unless (and server-tests/can-create-frames-p
++                    (not (string-prefix-p "riscv64-"
++                                          system-configuration))))
+   (let* ((starting-frames (frame-list))
+          (starting-frame-count (length starting-frames))
+          terminal)

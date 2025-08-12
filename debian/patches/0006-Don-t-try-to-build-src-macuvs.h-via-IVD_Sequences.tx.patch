@@ -1,4 +1,4 @@
-From 8b9b66cabea1f48698ea3c8e6c66f9e9f6110965 Mon Sep 17 00:00:00 2001
+From a67a63533c85ea632331b85b65df8cf6ce574aa0 Mon Sep 17 00:00:00 2001
 From: Rob Browning <rlb@defaultvalue.org>
 Date: Tue, 21 Oct 2014 19:10:17 -0500
 Subject: Don't try to build src/macuvs.h (via IVD_Sequences.txt)
@@ -10,7 +10,7 @@ over the licensing.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/admin/unidata/Makefile.in b/admin/unidata/Makefile.in
-index 6768d610ee0..162ee36bafc 100644
+index 223d3fe9cab..d61086f2206 100644
 --- a/admin/unidata/Makefile.in
 +++ b/admin/unidata/Makefile.in
 @@ -43,7 +43,7 @@ unifiles =

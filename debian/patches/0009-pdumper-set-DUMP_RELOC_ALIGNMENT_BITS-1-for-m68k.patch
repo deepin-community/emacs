@@ -1,4 +1,4 @@
-From 3e5ac5a4ca90e835853803e6310bd8a92cdd9364 Mon Sep 17 00:00:00 2001
+From 58ea833d44d881fa30f99946b2b51a82648623c3 Mon Sep 17 00:00:00 2001
 From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Date: Sat, 24 Sep 2022 13:37:18 -0500
 Subject: pdumper: set DUMP_RELOC_ALIGNMENT_BITS=1 for m68k
@@ -30,10 +30,10 @@ Forwarded: not-needed
  1 file changed, 4 insertions(+)
 
 diff --git a/src/pdumper.c b/src/pdumper.c
-index 1b5ead5fb4a..72853c134b2 100644
+index bc7cfffeca2..6e4770a5ffd 100644
 --- a/src/pdumper.c
 +++ b/src/pdumper.c
-@@ -264,7 +264,11 @@ emacs_reloc_set_type (struct emacs_reloc *reloc,
+@@ -263,7 +263,11 @@ emacs_reloc_set_type (struct emacs_reloc *reloc,
  enum
    {
     DUMP_RELOC_TYPE_BITS = 5,

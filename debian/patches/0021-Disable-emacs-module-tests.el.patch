@@ -1,0 +1,26 @@
+From 22d6e7ad34d947c1154358cd3a59789f539a9cf5 Mon Sep 17 00:00:00 2001
+From: Sean Whitton <spwhitton@spwhitton.name>
+Date: Sun, 30 Mar 2025 13:24:23 +0800
+Subject: Disable emacs-module-tests.el
+
+This regularly causes Emacs to FTBFS.
+---
+ test/Makefile.in | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/test/Makefile.in b/test/Makefile.in
+index 842c0517b98..578c05281b4 100644
+--- a/test/Makefile.in
++++ b/test/Makefile.in
+@@ -186,11 +186,7 @@ testloadfile =
+ 	  -l ert ${ert_opts} -l $(testloadfile) \
+ 	  $(TEST_RUN_ERT)
+ 
+-ifeq (@HAVE_MODULES@, yes)
+-maybe_exclude_module_tests :=
+-else
+ maybe_exclude_module_tests := -name emacs-module-tests.el -prune -o
+-endif
+ 
+ ## Optional list of .el files to exclude from testing.
+ ## Intended for use in automated testing where one or more files

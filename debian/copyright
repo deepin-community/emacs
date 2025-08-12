@@ -10,8 +10,8 @@ Comment:
  .
  The original source for this package can be found at
  git://git.savannah.gnu.org/emacs.git under the
- emacs-29.4 tag.  That tag was used to create the
- Debian upstream archive (emacs_29.4+1.orig.tar.xz)
+ emacs-30.1 tag.  That tag was used to create the
+ Debian upstream archive (emacs_30.1+1.orig.tar.xz)
  after making adjustments to comply with the DFSG (see below).
  .
  Please see /usr/share/doc/emacs-common/README.Debian.gz for a
@@ -237,6 +237,8 @@ Files:
  etc/images/attach.xpm
  etc/images/bookmark_add.pbm
  etc/images/bookmark_add.xpm
+ etc/images/commit.pbm
+ etc/images/commit.xpm
  etc/images/cancel.pbm
  etc/images/cancel.xpm
  etc/images/connect.pbm
@@ -253,6 +255,12 @@ Files:
  etc/images/disconnect.xpm
  etc/images/exit.pbm
  etc/images/exit.xpm
+ etc/images/gen-changelog.pbm
+ etc/images/gen-changelog.xpm
+ etc/images/ins-changelog.pbm
+ etc/images/ins-changelog.xpm
+ etc/images/load-changelog.pbm
+ etc/images/load-changelog.xpm
  etc/images/lock-broken.pbm
  etc/images/lock-broken.xpm
  etc/images/lock-ok.pbm
@@ -287,6 +295,8 @@ Files:
  etc/images/sort-row-ascending.xpm
  etc/images/up-node.pbm
  etc/images/up-node.xpm
+ etc/images/view-diff.pbm
+ etc/images/view-diff.xpm
  etc/images/zoom-in.pbm
  etc/images/zoom-in.xpm
  etc/images/zoom-out.pbm
