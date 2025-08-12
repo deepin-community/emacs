@@ -1,4 +1,4 @@
-From fdce3dad91c479fd1b7a1c12a0b482a3a4b05fd1 Mon Sep 17 00:00:00 2001
+From e870e02836cb8e7718611f24a0a47cd49782c574 Mon Sep 17 00:00:00 2001
 From: Rob Browning <rlb@defaultvalue.org>
 Date: Sat, 29 Jun 2024 11:01:56 -0500
 Subject: Mark dired-test-bug27243-02 as unstable for now
@@ -41,7 +41,7 @@ Forwarded: not-needed
  1 file changed, 1 insertion(+)
 
 diff --git a/test/lisp/dired-tests.el b/test/lisp/dired-tests.el
-index 2589281e5e1..ea570fdf1a0 100644
+index c9a1ff4249b..6dee47d141d 100644
 --- a/test/lisp/dired-tests.el
 +++ b/test/lisp/dired-tests.el
 @@ -188,6 +188,7 @@ dired-test-bug27243-01
@@ -50,5 +50,5 @@ index 2589281e5e1..ea570fdf1a0 100644
    "Test for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27243#28 ."
 +  :tags '(:unstable)
    (ert-with-temp-directory test-dir
-     (let ((dired-auto-revert-buffer t) buffers)
-       ;; On MS-Windows, get rid of 8+3 short names in test-dir, if the
+     (let ((dired-auto-revert-buffer t)
+           (dired-free-space nil)

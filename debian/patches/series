@@ -15,4 +15,7 @@
 0015-Change-native-comp-async-jobs-number-default-to-1.patch
 0016-Change-native-comp-async-report-warnings-errors-to-s.patch
 0017-Mark-dired-test-bug27243-02-as-unstable-for-now.patch
-0018-Disable-flymake-included-c-header-files-test-to-fix-.patch
+0018-Fix-eldoc-warning-in-patch-adding-debian-emacs-flavo.patch
+0019-Boost-BASE_PURESIZE-in-attempt-to-fix-build-on-32-bi.patch
+0020-Disable-server-tests-server-force-stop-keeps-frames-.patch
+0021-Disable-emacs-module-tests.el.patch

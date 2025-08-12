@@ -1,6 +1,6 @@
 ;;; admin.el --- utilities for Emacs administration  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2001-2024 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2025 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -112,6 +112,10 @@ Root must be the root of an Emacs source tree."
 		       (rx (and "AC_INIT" (1+ (not (in ?,)))
                                 ?, (0+ space) ?\[
                                 (submatch (1+ (in "0-9."))))))
+  (set-version-in-file root "exec/configure.ac" version
+		       (rx (and "AC_INIT" (1+ (not (in ?,)))
+                                ?, (0+ space) ?\[
+                                (submatch (1+ (in "0-9."))))))
   (set-version-in-file root "nt/README.W32" version
 		       (rx (and "version" (1+ space)
 				(submatch (1+ (in "0-9."))))))
@@ -127,6 +131,11 @@ Root must be the root of an Emacs source tree."
       (set-version-in-file root "etc/refcards/ru-refcard.tex" newmajor
                            "\\\\newcommand{\\\\versionemacs}\\[0\\]\
 {\\([0-9]\\{2,\\}\\)}.+%.+version of Emacs")))
+  ;; Note: There's also the "android:versionCode=" property in
+  ;; java/AndroidManifest.xml, whose value is the major Emacs version,
+  ;; but if we increase it, upgraded installation will be unable to be
+  ;; downgraded to previous Emacs releases.  (The corresponding
+  ;; "android:versionName=" value there is updated by configure.)
   (let* ((oldversion
           (with-temp-buffer
             (insert-file-contents (expand-file-name "README" root))
@@ -613,9 +622,7 @@ style=\"text-align:left\">")
       ;; item is not there anymore.  So for HTML manuals produced by
       ;; those newer versions of Texinfo we punt and leave the menu in
       ;; its original form.
-      (when (or (search-forward "<ul class=\"menu\">" nil t)
-	        ;; FIXME?  The following search seems dangerously lax.
-	        (search-forward "<ul>" nil t))
+      (when (or (search-forward "<ul class=\"menu\">" nil t))
         ;; Convert the list that Makeinfo made into a table.
         (replace-match "<table style=\"float:left\" width=\"100%\">")
         (forward-line 1)
@@ -843,8 +850,11 @@ $Date: %s $
       (package-install pkg)
       (require pkg nil t))))
 
+(declare-function org-html-export-as-html "ox-html.el")
 (defvar org-html-postamble)
 (defvar org-html-mathjax-template)
+(defvar htmlize-output-type)
+
 (defun make-news-html-file (root version)
   "Convert the NEWS file into an HTML file."
   (interactive (let ((root
@@ -1035,8 +1045,7 @@ If optional argument OLD is non-nil, also scan for `defvar's."
 		  (and grp
 		       (setq grp (car (cdr-safe grp))) ; (quote foo) -> foo
 		       (setq ver (assq grp glist))))
-		(setq alist (cons (cons var ver) alist))))
-          (if form (format-message "Malformed defcustom: `%s'" form)))))
+		(setq alist (cons (cons var ver) alist)))))))
     (message "%sdone" m)
     alist))
 

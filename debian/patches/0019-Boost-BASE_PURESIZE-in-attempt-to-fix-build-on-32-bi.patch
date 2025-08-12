@@ -1,0 +1,22 @@
+From 2be074322744c69ff73ea5e7225c60be95ebfc32 Mon Sep 17 00:00:00 2001
+From: Sean Whitton <spwhitton@spwhitton.name>
+Date: Tue, 25 Feb 2025 09:19:38 +0800
+Subject: Boost BASE_PURESIZE in attempt to fix build on 32-bit archs
+
+---
+ src/puresize.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/puresize.h b/src/puresize.h
+index f2576666a66..be727ba68cd 100644
+--- a/src/puresize.h
++++ b/src/puresize.h
+@@ -47,7 +47,7 @@ #define SITELOAD_PURESIZE_EXTRA 0
+ #endif
+ 
+ #ifndef BASE_PURESIZE
+-#define BASE_PURESIZE (3400000 + SYSTEM_PURESIZE_EXTRA + SITELOAD_PURESIZE_EXTRA)
++#define BASE_PURESIZE (4500000 + SYSTEM_PURESIZE_EXTRA + SITELOAD_PURESIZE_EXTRA)
+ #endif
+ 
+ /* Increase BASE_PURESIZE by a ratio depending on the machine's word size.  */

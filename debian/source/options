@@ -1,0 +1,1 @@
+extend-diff-ignore = (.github/*)|(.gitlab-ci)|(.clang-format)|(.dir-locals.el)
